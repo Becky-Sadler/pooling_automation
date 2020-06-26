@@ -12,15 +12,15 @@ metadata = {
 '''
 Protocol requirements: 
 
-Pipettes: P20 GEN2 single channel (LEFT), P300 GEN2 single channel (RIGHT)
+Pipettes: P20 GEN2 single channel 1-20ul (LEFT), P300 GEN2 single channel 20-300ul (RIGHT)
 
 Custom Labware: 
 	NonSkirted 96-well plate in flat plate holder (API Load name = 4t_96_wellplate_200ul)
 	4x6 rack for 1.5ml microfuge tubes (API Load name = biomekmicrofuge_24_wellplate_1700ul)
 
 Deck Layout:
-	Position 10:	OpenTrons 20ul tip rack
-	Position 11:	OpenTrons 300ul tip rack
+	Position 10:	OpenTrons 20ul tip rack (opentrons_96_tiprack_20ul)
+	Position 11:	OpenTrons 300ul tip rack (opentrons_96_tiprack_300ul)
 	Position 8:		NonSkirted 96-well plate in flat plate holder
 	Position 7:		4x6 rack for 1.5ml microfuge tubes (Wells used: A1 D1 500ul in each)
 
@@ -62,6 +62,52 @@ Transfers:
 '''
 
 def run(protocol: protocol_api.ProtocolContext):
+
+	# Add labware
+	non_skirted_plate = protocol.load_labware('4t_96_wellplate_200ul', '8')
+	biomek_tube_rack = protocol.load_labware('biomekmicrofuge_24_wellplate_1700ul', '7')
+	20ul_tiprack = protocol.load_labware('opentrons_96_tiprack_20ul', '10')
+	300ul_tiprack = protocol.load_labware('opentrons_96_tiprack_300ul', '11')
+
+	# Add pipettes
+	left_pipette = protocol.load_instrument('p20_single_gen2', 'left', tip_racks=[20ul_tiprack])
+	right_pipette = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[300ul_tiprack])
+
+	# Commands
+
+	# Command 1:
+	left_pipette.pick_up_tip()
+	left_pipette.aspirate(10, biomek_tube_rack['A1'])
+	tip toucgh? 
+	left_pipette.dispense(10, non_skirted_plate['A1'])
+	tip touch?
+	left_pipette.drop_tip()
+
+	# Command 2: 
+	left_pipette.pick_up_tip()
+	left_pipette.aspirate(10, biomek_tube_rack['D1'])
+	tip touch? 
+	left_pipette.dispense(10, non_skirted_plate['H1'])
+	tip touch? 
+	left_pipette.drop_tip()
+
+	# Command 3:
+	right_pipette.pick_up_tip()
+	right_pipette.aspirate(150, biomek_tube_rack['A1'])
+	tip touch? 
+	right_pipette.dispense(150, non_skirted_plate['A12'])
+	tip touch?
+	right_pipette.drop_tip()
+
+	# Command 4:
+	right_pipette.pick_up_tip()
+	right_pipette.aspirate(150,biomek_tube_rack['D1'])
+	tip touch? 
+	right_pipette.dispense(150, non_skirted_plate['H12'])
+	tip touch?
+	right_pipette.drop_tip()
+
+
 
 
 
