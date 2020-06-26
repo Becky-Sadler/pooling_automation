@@ -78,33 +78,33 @@ def run(protocol: protocol_api.ProtocolContext):
 	# Command 1:
 	left_pipette.pick_up_tip()
 	left_pipette.aspirate(10, biomek_tube_rack['A1'])
-	tip toucgh? 
+	left_pipette.tip_touch(well = 'A1' speed = 20.0) 
 	left_pipette.dispense(10, non_skirted_plate['A1'])
-	tip touch?
+	left_pipette.tip_touch() 
 	left_pipette.drop_tip()
 
 	# Command 2: 
 	left_pipette.pick_up_tip()
 	left_pipette.aspirate(10, biomek_tube_rack['D1'])
-	tip touch? 
+	left_pipette.tip_touch() 
 	left_pipette.dispense(10, non_skirted_plate['H1'])
-	tip touch? 
+	left_pipette.tip_touch() 
 	left_pipette.drop_tip()
 
 	# Command 3:
 	right_pipette.pick_up_tip()
 	right_pipette.aspirate(150, biomek_tube_rack['A1'])
-	tip touch? 
+	right_pipette.tip_touch() 
 	right_pipette.dispense(150, non_skirted_plate['A12'])
-	tip touch?
+	right_pipette.tip_touch() 
 	right_pipette.drop_tip()
 
 	# Command 4:
 	right_pipette.pick_up_tip()
 	right_pipette.aspirate(150,biomek_tube_rack['D1'])
-	tip touch? 
+	right_pipette.tip_touch() 
 	right_pipette.dispense(150, non_skirted_plate['H12'])
-	tip touch?
+	right_pipette.tip_touch() 
 	right_pipette.drop_tip()
 
 
