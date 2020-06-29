@@ -1,12 +1,12 @@
 from opentrons import protocol_api 
 
-# version 2.4 is still in beta (can reduce speed of touch tip to 1mm/s in this one so upgarde?) - What is the robot software version? I've assumed 2.3 is ok for now, will query.  
+# version 2.4 is still in beta (can reduce speed of touch tip to 1mm/s in this one so upgrade?) - What is the robot software version? I've assumed 2.3 is ok for now, will query.  
 
 metadata = {
-	'protocolName' : 'Test Protocol'
-	'author' : 'Becky Sadler'
+	'apiLevel' :  '2.3',
+	'protocolName' : 'Test Protocol',
+	'author' : 'Becky Sadler',
 	'description' : 'Proof of concept protocol to check that the simulation module works and the protocol runs correctly on the OT2'
-	'api_level' :  '2.3'
 }
 
 '''
@@ -66,45 +66,49 @@ def run(protocol: protocol_api.ProtocolContext):
 	# Add labware
 	non_skirted_plate = protocol.load_labware('4t_96_wellplate_200ul', '8')
 	biomek_tube_rack = protocol.load_labware('biomekmicrofuge_24_wellplate_1700ul', '7')
-	20ul_tiprack = protocol.load_labware('opentrons_96_tiprack_20ul', '10')
-	300ul_tiprack = protocol.load_labware('opentrons_96_tiprack_300ul', '11')
+	tiprack_20ul = protocol.load_labware('opentrons_96_tiprack_20ul', '10')
+	tiprack_300ul = protocol.load_labware('opentrons_96_tiprack_300ul', '11')
 
 	# Add pipettes
-	left_pipette = protocol.load_instrument('p20_single_gen2', 'left', tip_racks=[20ul_tiprack])
-	right_pipette = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[300ul_tiprack])
+	left_pipette = protocol.load_instrument('p20_single_gen2', 'left', tip_racks=[tiprack_20ul])
+	right_pipette = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[tiprack_300ul])
+	# Change default aspirate height to 5mm
+	left_pipette.well_bottom_clearance.aspirate = 5
+	right_pipette.well_bottom_clearance.aspirate = 5
 
-	# Commands
+	# Transfers
 
-	# Command 1:
+	# Transfer 1:
 	left_pipette.pick_up_tip()
 	left_pipette.aspirate(10, biomek_tube_rack['A1'])
-	left_pipette.tip_touch(well = 'A1' speed = 20.0) 
+	left_pipette.touch_tip(biomek_tube_rack['A1'], speed = 20.0) 
+	# Default dispence is at 1mm 
 	left_pipette.dispense(10, non_skirted_plate['A1'])
-	left_pipette.tip_touch() 
+	left_pipette.touch_tip(non_skirted_plate['A1'], speed = 20.0) 
 	left_pipette.drop_tip()
 
-	# Command 2: 
+	# Transfer 2: 
 	left_pipette.pick_up_tip()
 	left_pipette.aspirate(10, biomek_tube_rack['D1'])
-	left_pipette.tip_touch() 
+	left_pipette.touch_tip(biomek_tube_rack['D1'], speed = 20.0) 
 	left_pipette.dispense(10, non_skirted_plate['H1'])
-	left_pipette.tip_touch() 
+	left_pipette.touch_tip(non_skirted_plate['H1'], speed = 20.0) 
 	left_pipette.drop_tip()
 
-	# Command 3:
+	# Transfer 3:
 	right_pipette.pick_up_tip()
 	right_pipette.aspirate(150, biomek_tube_rack['A1'])
-	right_pipette.tip_touch() 
+	right_pipette.touch_tip(biomek_tube_rack['A1'], speed = 20.0) 
 	right_pipette.dispense(150, non_skirted_plate['A12'])
-	right_pipette.tip_touch() 
+	right_pipette.touch_tip(non_skirted_plate['A12'], speed = 20.0) 
 	right_pipette.drop_tip()
 
-	# Command 4:
+	# Transfer 4:
 	right_pipette.pick_up_tip()
 	right_pipette.aspirate(150,biomek_tube_rack['D1'])
-	right_pipette.tip_touch() 
+	right_pipette.touch_tip(biomek_tube_rack['D1'], speed = 20.0) 
 	right_pipette.dispense(150, non_skirted_plate['H12'])
-	right_pipette.tip_touch() 
+	right_pipette.touch_tip(non_skirted_plate['H12'], speed = 20.0) 
 	right_pipette.drop_tip()
 
 
