@@ -39,7 +39,7 @@ Transfers:
 	}
 	2: {
 	Source Position : 7
-	Source Well : A6/D1?
+	Source Well : D1
 	Destination Position : 8
 	Destination Well : H1
 	Volume : 10ul
@@ -53,7 +53,7 @@ Transfers:
 	}
 	4: {
 	Source Position : 7
-	Source Well : A6/D1
+	Source Well : D1
 	Destination Position : 8
 	Destination Well : H12
 	Volume : 150ul 
