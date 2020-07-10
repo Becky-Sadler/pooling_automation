@@ -63,7 +63,6 @@ B3,1.80,AC,2010750,U018,00000000,104.44
 C3,1.85,AC,2010750,U019,00000000,101.33
 D3,1.84,AC,2010750,U020,00000000,102.00
 E3,1.92,AC,2010750,U021,00000000,97.89
-E3,1.92,AC,2010750,U021,00000000,97.89
 F3,2.00,AC,2010750,U022,00000000,93.91
 G3,2.23,AC,2010750,U023,00000000,84.03
 H3,1.91,AC,2010750,U024,00000000,97.94
@@ -89,35 +88,37 @@ def run(protocol: protocol_api.ProtocolContext):
 
 	# Add pipettes
 	left_pipette = protocol.load_instrument('p20_single_gen2', 'left', tip_racks=[tiprack_20ul])
-	# Height for the aspirate doesn't change, so I will state outside the loop. Variable for dispense also created here.
+	# Height for the aspirate and dispense doesn't change, so I will state outside the loop. 
 	left_pipette.well_bottom_clearance.aspirate = 2
-	dispense_height = 1
+	left_pipette.well_bottom_clearance.dispense = 1
 
 	# Transfers - .transfer() not specific enough for what is needed.
 	for row in reader: 
 		left_pipette.pick_up_tip()
 		left_pipette.aspirate(float(row['Vol to Pool']), non_skirted_plate[(row['Well'])])
 		left_pipette.touch_tip(non_skirted_plate[(row['Well'])], speed = 20.0, v_offset = -3.0) 
-		left_pipette.well_bottom_clearance.dispense = dispense_height
 		blow_out_height = dispense_height + 0.5
 		if row['Pool'] == 'AA':
 			left_pipette.dispense(float(row['Vol to Pool']), biomek_tube_rack['A1'])
 			left_pipette.move_to(biomek_tube_rack['A1'].bottom(blow_out_height), force_direct=True)
+			left_pipette.blow_out()
+			left_pipette.touch_tip(biomek_tube_rack['A1'], speed = 20.0, v_offset = -5.0) 
 		if row['Pool'] == 'AB':
 			left_pipette.dispense(float(row['Vol to Pool']), biomek_tube_rack['B1'])
 			left_pipette.move_to(biomek_tube_rack['B1'].bottom(blow_out_height), force_direct=True)
+			left_pipette.blow_out()
+			left_pipette.touch_tip(biomek_tube_rack['A1'], speed = 20.0, v_offset = -5.0) 
 		if row['Pool'] == 'AC':
 			left_pipette.dispense(float(row['Vol to Pool']), biomek_tube_rack['C1'])
 			left_pipette.move_to(biomek_tube_rack['C1'].bottom(blow_out_height), force_direct=True)
+			left_pipette.blow_out()
+			left_pipette.touch_tip(biomek_tube_rack['A1'], speed = 20.0, v_offset = -5.0) 
 		if row['Pool'] == 'AD':
 			left_pipette.dispense(float(row['Vol to Pool']), biomek_tube_rack['D1'])
-			left_pipette.move_to(biomek_tube_rack['D1'].bottom(blow_out_height), force_direct=True)
-		left_pipette.blow_out() 
+			left_pipette.move_to(biomek_tube_rack['D1'].bottom(blow_out_height), force_direct=True) 
+			left_pipette.blow_out()
+			left_pipette.touch_tip(biomek_tube_rack['A1'], speed = 20.0, v_offset = -5.0) 
 		left_pipette.drop_tip()
-		if dispense_height <= 4.0:
-			dispense_height += 0.5
-		else: 
-			dispense_height = 1
 
 
 
