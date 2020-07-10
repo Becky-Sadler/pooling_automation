@@ -101,23 +101,16 @@ def run(protocol: protocol_api.ProtocolContext):
 		if row['Pool'] == 'AA':
 			left_pipette.dispense(float(row['Vol to Pool']), biomek_tube_rack['A1'])
 			left_pipette.move_to(biomek_tube_rack['A1'].bottom(blow_out_height), force_direct=True)
-			left_pipette.blow_out()
-			left_pipette.touch_tip(biomek_tube_rack['A1'], speed = 20.0, v_offset = -5.0) 
 		if row['Pool'] == 'AB':
 			left_pipette.dispense(float(row['Vol to Pool']), biomek_tube_rack['B1'])
 			left_pipette.move_to(biomek_tube_rack['B1'].bottom(blow_out_height), force_direct=True)
-			left_pipette.blow_out()
-			left_pipette.touch_tip(biomek_tube_rack['A1'], speed = 20.0, v_offset = -5.0) 
 		if row['Pool'] == 'AC':
 			left_pipette.dispense(float(row['Vol to Pool']), biomek_tube_rack['C1'])
 			left_pipette.move_to(biomek_tube_rack['C1'].bottom(blow_out_height), force_direct=True)
-			left_pipette.blow_out()
-			left_pipette.touch_tip(biomek_tube_rack['A1'], speed = 20.0, v_offset = -5.0) 
 		if row['Pool'] == 'AD':
 			left_pipette.dispense(float(row['Vol to Pool']), biomek_tube_rack['D1'])
-			left_pipette.move_to(biomek_tube_rack['D1'].bottom(blow_out_height), force_direct=True) 
-			left_pipette.blow_out()
-			left_pipette.touch_tip(biomek_tube_rack['A1'], speed = 20.0, v_offset = -5.0) 
+			left_pipette.move_to(biomek_tube_rack['D1'].bottom(blow_out_height), force_direct=True)
+		left_pipette.blow_out()
 		left_pipette.drop_tip()
 
 
