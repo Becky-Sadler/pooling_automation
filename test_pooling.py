@@ -34,7 +34,7 @@ Transfer process:
 	Get tip (NEW ONE)
 	Aspirate from well at 2mm 
 	Touch tip (2-3mm from top)
-	Dispense into well (Initially at 1mm)
+	Dispense into well (At 1mm)
 	Blow out (+0.5mm above)
 	Drop tip. 
 '''
@@ -97,7 +97,8 @@ def run(protocol: protocol_api.ProtocolContext):
 		left_pipette.pick_up_tip()
 		left_pipette.aspirate(float(row['Vol to Pool']), non_skirted_plate[(row['Well'])])
 		left_pipette.touch_tip(non_skirted_plate[(row['Well'])], speed = 20.0, v_offset = -3.0) 
-		blow_out_height = dispense_height + 0.5
+		# Blow out height is 0.5 above the dispense height (1 + 0.5) 
+		blow_out_height = 1.5
 		if row['Pool'] == 'AA':
 			left_pipette.dispense(float(row['Vol to Pool']), biomek_tube_rack['A1'])
 			left_pipette.move_to(biomek_tube_rack['A1'].bottom(blow_out_height), force_direct=True)
