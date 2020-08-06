@@ -1,9 +1,8 @@
 from opentrons import protocol_api 
 import csv 
 
-# Use 'author' to specify the operator? 
 metadata = {
-	'apiLevel' :  '2.4',
+	'apiLevel' :  '2.5',
 	'protocolName' : 'Test Pooling Protocol',
 	'author' : 'Becky Sadler',
 	'description' : 'Protocol to check that the functions used for pooling work as expected'
@@ -78,6 +77,24 @@ H4,2.06,AD,2010750,U032,00000000,90.92
 
 csv_data = data.splitlines() 
 reader = csv.DictReader(csv_data)
+
+'''
+Possible alternative using lists (Have a ponder if this is needed if the reader works fine!)
+#Load data files
+welllist=[]
+tubelist=[]
+volumelist=[]
+with open("/root/csv/amplicon_pooling_v1_map.csv", "r") as csvfile:
+    transfermap = csv.reader(csvfile, delimiter=',')
+    for i in transfermap:
+        welllist.append(i[0])
+        tubelist.append(i[1])
+        volumelist.append(i[2])
+
+#Remove headers
+welllist.pop(0)
+tubelist.pop(0)
+volumelist.pop(0)'''
 
 def run(protocol: protocol_api.ProtocolContext):
 
