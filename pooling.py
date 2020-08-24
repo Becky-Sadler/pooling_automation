@@ -39,11 +39,25 @@ Transfer process:
 	Drop tip. 
 '''
 
-# Sorting out data input: 
+# Sorting out data input - user input:  
 
-csv_name = 'test_pooling.csv'
+worklist_number = None
+#First test to see if the user has entered a numerical value:
+while True:
+	worklist_number = input('Please enter the worklist number: ')
+	try:
+		worklist_number = int(worklist_number)
 
-csvfile = open(csv_name, newline='')
+		worklist_number = str(worklist_number)
+		filename = 'pooling_' + worklist_number + '.csv'
+		break
+
+#The alternative output for the first test code for if a non-numerical value is entered:
+	except:
+		print('Invalid input, please enter a numeric input')
+		continue	
+
+csvfile = open(filename, newline='')
 reader = csv.DictReader(csvfile)
 
 def run(protocol: protocol_api.ProtocolContext):
