@@ -49,7 +49,7 @@ while True:
 		worklist_number = int(worklist_number)
 
 		worklist_number = str(worklist_number)
-		filename = 'pooling_' + worklist_number + '.csv'
+		filename = worklist_number + '_pooling.csv'
 		break
 
 #The alternative output for the first test code for if a non-numerical value is entered:
