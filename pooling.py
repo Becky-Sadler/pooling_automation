@@ -1,8 +1,9 @@
 from opentrons import protocol_api 
 import csv 
+import sys
 
 metadata = {
-	'apiLevel' :  '2.5',
+	'apiLevel' :  '2.0',
 	'protocolName' : 'Pooling Protocol',
 	'author' : 'Becky Sadler',
 	'description' : 'Pooling protocol for the TWIST library preparation'
@@ -55,14 +56,24 @@ while True:
 #The alternative output for the first test code for if a non-numerical value is entered:
 	except:
 		print('Invalid input, please enter a numeric input')
+		#Creates loop back up
 		continue	
 
-csvfile = open(filename, newline='')
+# Additing code to catch the error where there is no CSV file for that worklist. 
+
+try:
+	# Open csv file and create reader 
+	csvfile = open(filename, newline='')
+except FileNotFoundError:
+	print('Error: please check the correct worklist number has been inputted. If so, please also check that the CSV file has been uploaded to the robot') 
+	sys.exit()
+
 reader = csv.DictReader(csvfile)
 
+# Define the protocol desk set up and steps. 
 def run(protocol: protocol_api.ProtocolContext):
 
-	# Add labware
+# Add labware
 	non_skirted_plate = protocol.load_labware('4t_96_wellplate_200ul', '8')
 	biomek_tube_rack = protocol.load_labware('biomekmicrofuge_24_wellplate_1700ul', '7')
 	tiprack_20ul = protocol.load_labware('opentrons_96_tiprack_20ul', '10')
@@ -85,3 +96,5 @@ def run(protocol: protocol_api.ProtocolContext):
 		left_pipette.touch_tip(biomek_tube_rack[(row['Pool'])], speed = 20.0, v_offset = -4.0) 
 		left_pipette.blow_out()
 		left_pipette.drop_tip()
+
+	
