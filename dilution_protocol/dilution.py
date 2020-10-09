@@ -1,5 +1,6 @@
 from opentrons import protocol_api 
 import csv 
+import sys
 
 metadata = {
 	'apiLevel' :  '2.4',
@@ -44,20 +45,47 @@ Transfer process:
 	Touch tip again 
 	Drop tip. 
 '''
+# Sorting out data input - user input:  
 
-csv_name = '11111_dilution.csv'
+worklist_number = None
+#First test to see if the user has entered a numerical value:
+while True:
+	worklist_number = input('Please enter the worklist number: ')
+	try:
+		worklist_number = int(worklist_number)
+
+		worklist_number = str(worklist_number)
+		filename = worklist_number + '_dilution.csv'
+		break
+
+#The alternative output for the first test code for if a non-numerical value is entered:
+	except:
+		print('Invalid input, please enter a numeric input')
+		#Creates loop back up
+		continue	
 
 source_welllist=[]
 destination_welllist = []
 dnalist=[]
 waterlist=[]
-with open(csv_name, newline='') as csvfile:
-	reader = csv.DictReader(csvfile, delimiter=',')
-	for row in reader:
-		source_welllist.append(row['SourceWell'])
-		destination_welllist.append(row['DestinationWell'])
-		dnalist.append(float(row['Vol of dna']))
-		waterlist.append(float(row['Vol of water']))
+
+# Adding code to catch the error where there is no CSV file for that worklist. 
+
+try:
+	# Open csv file and create reader 
+	csvfile = open(filename, newline='')
+except FileNotFoundError:
+	print('Error: File {0}_pooling.csv cannot be found.'.format(worklist_number)) 
+	print('Please check that the correct worklist number has been inputted.')
+	print('If the worklist number is correct, please check that the CSV file has been uploaded to the robot')
+	sys.exit()
+
+reader = csv.DictReader(csvfile, delimiter=',')
+for row in reader:
+	source_welllist.append(row['SourceWell'])
+	destination_welllist.append(row['DestinationWell'])
+	dnalist.append(float(row['Vol of dna']))
+	waterlist.append(float(row['Vol of water']))
 
 def run(protocol: protocol_api.ProtocolContext):
 
