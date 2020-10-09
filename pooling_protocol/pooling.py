@@ -65,7 +65,9 @@ try:
 	# Open csv file and create reader 
 	csvfile = open(filename, newline='')
 except FileNotFoundError:
-	print('Error: please check the correct worklist number has been inputted. If so, please also check that the CSV file has been uploaded to the robot') 
+	print('Error: File {0}_pooling.csv cannot be found.'.format(worklist_number)) 
+	print('Please check that the correct worklist number has been inputted.')
+	print('If the worklist number is correct, please check that the CSV file has been uploaded to the robot')
 	sys.exit()
 
 reader = csv.DictReader(csvfile)
