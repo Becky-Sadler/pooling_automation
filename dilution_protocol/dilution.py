@@ -82,18 +82,6 @@ def run(protocol: protocol_api.ProtocolContext):
 	# Add water via distribute (disposal volume is 20ul - the minimum for the pipette)
 	right_pipette.distribute(waterlist, biomek_tube_rack['A1'], [dilution_plate.wells_by_name()[well_name] for well_name in destination_welllist], touch_tip=True, disposal_volume=20 )
 
-	# Transfer dna
-	'''for well, dna in zip(welllist, dnalist):
-		left_pipette.pick_up_tip()
-		left_pipette.aspirate(float(dna), dna_plate[well])
-		left_pipette.touch_tip(dna_plate[well], speed = 20.0, v_offset = -3.0) 
-		# Blow out height is 0.5 above the dispense height (1 + 0.5) 
-		blow_out_height = 1.5
-		left_pipette.dispense(float(dna), dilution_plate[well])
-		left_pipette.move_to(dilution_plate[well].bottom(blow_out_height), force_direct=True)
-		left_pipette.touch_tip(dilution_plate[well], speed = 20.0, v_offset = -4.0) 
-		left_pipette.drop_tip()'''
+	# Transfer DNA using Transfer function (Mixing after each dispense with maximum volume of pipette + tip touch)
 
-	# Transfer DNA using Transfer function
-
-	left_pipette.transfer(dnalist, [dna_plate.wells_by_name()[source_well_name] for source_well_name in source_welllist], [dilution_plate.wells_by_name()[destination_well_name]for destination_well_name in destination_welllist])
+	left_pipette.transfer(dnalist, [dna_plate.wells_by_name()[source_well_name] for source_well_name in source_welllist], [dilution_plate.wells_by_name()[destination_well_name]for destination_well_name in destination_welllist], new_tip='always', mix_after=(8, 20), touch_tip=True)
