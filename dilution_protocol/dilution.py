@@ -96,8 +96,8 @@ def run(protocol: protocol_api.ProtocolContext):
 			right_pipette.touch_tip(dilution_plate[well], speed = 20.0, v_offset = -3.00)
 			volume_in_pipette = 200 - float(water)'''
 	
-	# Add water via distribute
-	right_pipette.distribute(waterlist, biomek_tube_rack['A1'], [dilution_plate.wells_by_name()[well_name] for well_name in welllist])
+	# Add water via distribute (disposal volume is 20ul - the minimum for the pipette)
+	right_pipette.distribute(waterlist, biomek_tube_rack['A1'], [dilution_plate.wells_by_name()[well_name] for well_name in welllist], touch_tip=True, disposal_volume=20 )
 
 
 	# Transfer dna
