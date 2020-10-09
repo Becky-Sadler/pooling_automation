@@ -59,7 +59,7 @@ while True:
 		#Creates loop back up
 		continue	
 
-# Additing code to catch the error where there is no CSV file for that worklist. 
+# Addition of code to catch the error where there is no CSV file for that worklist. 
 
 try:
 	# Open csv file and create reader 
