@@ -76,25 +76,6 @@ def run(protocol: protocol_api.ProtocolContext):
 	left_pipette.well_bottom_clearance.dispense = 1
 	right_pipette.well_bottom_clearance.aspirate = 2
 	right_pipette.well_bottom_clearance.dispense = 1
-
-# Add water via transfer
-	'''right_pipette.pick_up_tip()
-	right_pipette.aspirate(200, biomek_tube_rack['A1'])
-	right_pipette.touch_tip(biomek_tube_rack['A1'], speed = 20.0, v_offset = -3.0)
-
-	volume_in_pipette = float(200)
-
-	for well, water in zip(welllist, waterlist):
-		if volume_in_pipette > float(water):
-			right_pipette.dispense(float(water), dilution_plate[well])
-			right_pipette.touch_tip(dilution_plate[well], speed = 20.0, v_offset = -3.00)
-			volume_in_pipette -= float(water)
-		else: 
-			right_pipette.aspirate(200, biomek_tube_rack['A1'])
-			right_pipette.touch_tip(biomek_tube_rack['A1'], speed = 20.0, v_offset = -3.0)
-			right_pipette.dispense(float(water), dilution_plate[well])
-			right_pipette.touch_tip(dilution_plate[well], speed = 20.0, v_offset = -3.00)
-			volume_in_pipette = 200 - float(water)'''
 	
 	# Add water via distribute (disposal volume is 20ul - the minimum for the pipette)
 	right_pipette.distribute(waterlist, biomek_tube_rack['A1'], [dilution_plate.wells_by_name()[well_name] for well_name in welllist], touch_tip=True, disposal_volume=20 )
