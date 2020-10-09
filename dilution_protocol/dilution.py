@@ -47,7 +47,7 @@ Transfer process:
 	Drop tip. 
 '''
 
-csv_name = 'test_dilution.csv'
+csv_name = '11111_dilution.csv'
 
 welllist=[]
 dnalist=[]
@@ -56,8 +56,8 @@ with open(csv_name, newline='') as csvfile:
 	reader = csv.DictReader(csvfile, delimiter=',')
 	for row in reader:
 		welllist.append(row['Well'])
-		dnalist.append(row['Vol of dna'])
-		waterlist.append(row['Vol of water'])
+		dnalist.append(float(row['Vol of dna']))
+		waterlist.append(float(row['Vol of water']))
 
 def run(protocol: protocol_api.ProtocolContext):
 
@@ -77,8 +77,8 @@ def run(protocol: protocol_api.ProtocolContext):
 	right_pipette.well_bottom_clearance.aspirate = 2
 	right_pipette.well_bottom_clearance.dispense = 1
 
-# Add water 
-	right_pipette.pick_up_tip()
+# Add water via transfer
+	'''right_pipette.pick_up_tip()
 	right_pipette.aspirate(200, biomek_tube_rack['A1'])
 	right_pipette.touch_tip(biomek_tube_rack['A1'], speed = 20.0, v_offset = -3.0)
 
@@ -94,7 +94,10 @@ def run(protocol: protocol_api.ProtocolContext):
 			right_pipette.touch_tip(biomek_tube_rack['A1'], speed = 20.0, v_offset = -3.0)
 			right_pipette.dispense(float(water), dilution_plate[well])
 			right_pipette.touch_tip(dilution_plate[well], speed = 20.0, v_offset = -3.00)
-			volume_in_pipette = 200 - float(water)
+			volume_in_pipette = 200 - float(water)'''
+	
+	# Add water via distribute
+	right_pipette.distribute(waterlist, biomek_tube_rack['A1'], [dilution_plate.wells_by_name()[well_name] for well_name in welllist])
 
 
 	# Transfer dna
