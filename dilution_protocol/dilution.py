@@ -49,13 +49,15 @@ Transfer process:
 
 csv_name = '11111_dilution.csv'
 
-welllist=[]
+source_welllist=[]
+destination_welllist = []
 dnalist=[]
 waterlist=[]
 with open(csv_name, newline='') as csvfile:
 	reader = csv.DictReader(csvfile, delimiter=',')
 	for row in reader:
-		welllist.append(row['Well'])
+		source_welllist.append(row['SourceWell'])
+		destination_welllist.append(row['DestinationWell'])
 		dnalist.append(float(row['Vol of dna']))
 		waterlist.append(float(row['Vol of water']))
 
@@ -78,11 +80,10 @@ def run(protocol: protocol_api.ProtocolContext):
 	right_pipette.well_bottom_clearance.dispense = 1
 	
 	# Add water via distribute (disposal volume is 20ul - the minimum for the pipette)
-	right_pipette.distribute(waterlist, biomek_tube_rack['A1'], [dilution_plate.wells_by_name()[well_name] for well_name in welllist], touch_tip=True, disposal_volume=20 )
-
+	right_pipette.distribute(waterlist, biomek_tube_rack['A1'], [dilution_plate.wells_by_name()[well_name] for well_name in destination_welllist], touch_tip=True, disposal_volume=20 )
 
 	# Transfer dna
-	for well, dna in zip(welllist, dnalist):
+	'''for well, dna in zip(welllist, dnalist):
 		left_pipette.pick_up_tip()
 		left_pipette.aspirate(float(dna), dna_plate[well])
 		left_pipette.touch_tip(dna_plate[well], speed = 20.0, v_offset = -3.0) 
@@ -91,5 +92,8 @@ def run(protocol: protocol_api.ProtocolContext):
 		left_pipette.dispense(float(dna), dilution_plate[well])
 		left_pipette.move_to(dilution_plate[well].bottom(blow_out_height), force_direct=True)
 		left_pipette.touch_tip(dilution_plate[well], speed = 20.0, v_offset = -4.0) 
-		left_pipette.drop_tip()
+		left_pipette.drop_tip()'''
 
+	# Transfer DNA using Transfer function
+
+	left_pipette.transfer(dnalist, [dna_plate.wells_by_name()[source_well_name] for source_well_name in source_welllist], [dilution_plate.wells_by_name()[destination_well_name]for destination_well_name in destination_welllist])
