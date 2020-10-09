@@ -72,7 +72,7 @@ waterlist=[]
 # Adding code to catch the error where there is no CSV file for that worklist. 
 
 try:
-	# Open csv file and create reader 
+	# Open csv file 
 	csvfile = open(filename, newline='')
 except FileNotFoundError:
 	print('Error: File {0}_pooling.csv cannot be found.'.format(worklist_number)) 
@@ -80,6 +80,7 @@ except FileNotFoundError:
 	print('If the worklist number is correct, please check that the CSV file has been uploaded to the robot')
 	sys.exit()
 
+# Create reader
 reader = csv.DictReader(csvfile, delimiter=',')
 for row in reader:
 	source_welllist.append(row['SourceWell'])
