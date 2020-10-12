@@ -93,11 +93,13 @@ def run(protocol: protocol_api.ProtocolContext):
 
     while start_tip == "":
         start_tip = input("Please enter the starting tip: ")
+        # Check the inputted value is valid location in the tip box e.g A1
         is_valid = re.match(r'[A-H][1-9]$|[A-H][0-1][0-2]', start_tip)
         if not is_valid:
             print('Invalid input, please re-enter the location of the starting tip')
             start_tip = ""
     
+        # If start tip is valid, check that there will not be an out of tips error. 
         if is_valid:
             print('Start tip is {0}'.format(start_tip))
             left_pipette.starting_tip = tiprack_20ul.well(start_tip)
@@ -117,6 +119,7 @@ def run(protocol: protocol_api.ProtocolContext):
                     left_pipette.drop_tip()
             except protocol_api.labware.OutOfTipsError as e:
                 print('Not enough tips to complete transfers. Please re-enter starting tip location')
+                # If not enough tips - the user will be prompted to re-enter the tip location
                 start_tip = ""
 
     
