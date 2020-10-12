@@ -3,9 +3,9 @@ import csv
 
 metadata = {
 	'apiLevel' :  '2.5',
-	'protocolName' : 'Pooling Protocol',
+	'protocolName' : 'Test_deck_layout',
 	'author' : 'Becky Sadler',
-	'description' : 'Pooling protocol for the TWIST library preparation'
+	'description' : 'Protocol to test how to make the desk layout customisable'
 }
 
 ''' 
@@ -49,6 +49,21 @@ def run(protocol: protocol_api.ProtocolContext):
 
 	row_count = sum(1 for row in layout_reader)
 
+	reservoir_list = {}
+	wellPlate_list = {}
+	tipRack_list = {}
+	tubeRack_list = {}
+	aluminumBlock_list = {} 
+	pipette_list = {}
+
+# Create dictionaries for each object? In the form {ID: load.labware()} 
+
+	for row in layout_reader:
+		if row['LabwareType'] == 'pipette':
+			pipette_list.append({row['ID']: })
+
+
+
 	# single plate
 	if row_count <= 3:
 		plate = protocol.load_labware('4t_96_wellplate_200ul', '8')
@@ -77,7 +92,7 @@ def run(protocol: protocol_api.ProtocolContext):
 
 	# Sorting out data input: 
 
-	csv_volume = 'test_pooling.csv'
+	csv_volume = 'test_transfers.csv'
 
 	csvfile = open(csv_volume, newline='')
 	volume_reader = csv.DictReader(csvfile)
