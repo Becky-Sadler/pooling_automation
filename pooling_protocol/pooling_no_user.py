@@ -42,7 +42,7 @@ Transfer process:
 
 # Sorting out data input - user input:  
 
-worklist_number = '2003360_Pooling.csv'
+worklist_number = 'Pooling.csv'
 #First test to see if the user has entered a numerical value:
 
 csvfile = open(worklist_number, newline='')
@@ -57,23 +57,23 @@ def run(protocol: protocol_api.ProtocolContext):
     tiprack_20ul = protocol.load_labware('opentrons_96_tiprack_20ul', '10')
 
     # Add pipettes
-    left_pipette = protocol.load_instrument('p20_single_gen2', 'left', tip_racks=[tiprack_20ul])
+    pipette = protocol.load_instrument('p20_single_gen2', 'left', tip_racks=[tiprack_20ul])
     # Height for the aspirate and dispense doesn't change, so I will state outside the loop. 
-    left_pipette.well_bottom_clearance.aspirate = 2
-    left_pipette.well_bottom_clearance.dispense = 1
+    pipette.well_bottom_clearance.aspirate = 2
+    pipette.well_bottom_clearance.dispense = 1
 
                 # Transfers 
     for row in reader: 
-        left_pipette.pick_up_tip()
-        left_pipette.aspirate(float(row['Vol to Pool']), non_skirted_plate[(row['Well'])])
-        left_pipette.touch_tip(non_skirted_plate[(row['Well'])], speed = 20.0, v_offset = -3.0) 
+        pipette.pick_up_tip()
+        pipette.aspirate(float(row['VolumeToTransfer']), non_skirted_plate[(row['SourceWell'])])
+        pipette.touch_tip(non_skirted_plate[(row['SourceWell'])], speed = 20.0, v_offset = -3.0) 
                     # Blow out height is 0.5 above the dispense height (1 + 0.5) 
         blow_out_height = 1.5
-        left_pipette.dispense(float(row['Vol to Pool']), biomek_tube_rack[row['Pool']])
-        left_pipette.move_to(biomek_tube_rack[row['Pool']].bottom(blow_out_height), force_direct=True)
-        left_pipette.touch_tip(biomek_tube_rack[(row['Pool'])], speed = 20.0, v_offset = -4.0) 
-        left_pipette.blow_out()
-        left_pipette.drop_tip()
+        pipette.dispense(float(row['VolumeToTransfer']), biomek_tube_rack[row['DestinationWell']])
+        pipette.move_to(biomek_tube_rack[row['DestinationWell']].bottom(blow_out_height), force_direct=True)
+        pipette.touch_tip(biomek_tube_rack[(row['DestinationWell'])], speed = 20.0, v_offset = -4.0) 
+        pipette.blow_out()
+        pipette.drop_tip()
             
 
     
