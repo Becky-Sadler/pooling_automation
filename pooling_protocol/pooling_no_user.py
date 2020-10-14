@@ -54,8 +54,8 @@ def run(protocol):
 
     protocol.pause("The worklist about to be processed is {0}, please ensure this is correct before proceeding".format(worklist_number))
 # Add labware
-    non_skirted_plate = protocol.load_labware('4t_96_wellplate_200ul', '8')
-    biomek_tube_rack = protocol.load_labware('biomekmicrofuge_24_wellplate_1700ul', '7')
+    non_skirted_plate = protocol.load_labware('4t_96_wellplate_200ul', '7')
+    biomek_tube_rack = protocol.load_labware('biomekmicrofuge_24_wellplate_1700ul', '8')
     tiprack_20ul = protocol.load_labware('opentrons_96_tiprack_20ul', '10')
 
     # Add pipettes
@@ -70,10 +70,10 @@ def run(protocol):
         pipette.aspirate(float(row['VolumeToTransfer']), non_skirted_plate[(row['SourceWell'])])
         pipette.touch_tip(non_skirted_plate[(row['SourceWell'])], speed = 20.0, v_offset = -3.0) 
                     # Blow out height is 0.5 above the dispense height (1 + 0.5) 
-        blow_out_height = 1.5
+        blow_out_height = 1
         pipette.dispense(float(row['VolumeToTransfer']), biomek_tube_rack[row['DestinationWell']])
-        pipette.move_to(biomek_tube_rack[row['DestinationWell']].bottom(blow_out_height), force_direct=True)
         pipette.touch_tip(biomek_tube_rack[(row['DestinationWell'])], speed = 20.0, v_offset = -4.0) 
+        pipette.move_to(biomek_tube_rack[row['DestinationWell']].bottom(blow_out_height), force_direct=True)
         pipette.blow_out()
         pipette.drop_tip()
             
