@@ -6,7 +6,7 @@ metadata = {
     'apiLevel' :  '2.5',
     'protocolName' : 'Pooling Protocol',
     'author' : 'Becky Sadler',
-    'description' : 'Pooling protocol for the TWIST library preparation'
+    'description' : 'Pooling protocol for the TWIST library preparation - Without user input of variables'
 }
 
 ''' 
@@ -42,15 +42,17 @@ Transfer process:
 
 # Sorting out data input - user input:  
 
-worklist_number = 'Pooling.csv'
+csv_name = 'Pooling.csv'
 #First test to see if the user has entered a numerical value:
 
-csvfile = open(worklist_number, newline='')
+csvfile = open(csv_name, newline='')
 reader = csv.DictReader(csvfile)
+worklist_number = '122356'
 
 # Define the protocol desk set up and steps. 
-def run(protocol: protocol_api.ProtocolContext):
+def run(protocol):
 
+    protocol.pause("The worklist about to be processed is {0}, please ensure this is correct before proceeding".format(worklist_number))
 # Add labware
     non_skirted_plate = protocol.load_labware('4t_96_wellplate_200ul', '8')
     biomek_tube_rack = protocol.load_labware('biomekmicrofuge_24_wellplate_1700ul', '7')
@@ -59,8 +61,8 @@ def run(protocol: protocol_api.ProtocolContext):
     # Add pipettes
     pipette = protocol.load_instrument('p20_single_gen2', 'left', tip_racks=[tiprack_20ul])
     # Height for the aspirate and dispense doesn't change, so I will state outside the loop. 
-    pipette.well_bottom_clearance.aspirate = 2
-    pipette.well_bottom_clearance.dispense = 1
+    pipette.well_bottom_clearance.aspirate = 1
+    pipette.well_bottom_clearance.dispense = 0.5
 
                 # Transfers 
     for row in reader: 
