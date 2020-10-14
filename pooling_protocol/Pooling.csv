@@ -1,4 +1,4 @@
-PatientId,Plate,Well,Vol to Pool,Pool
+PatientId,Plate,SourceWell,VolumeToTransfer,DestinationWell
 01,plate1,A1,2.16,A1
 02,plate1,B1,1.92,A1
 03,plate1,C1,1.94,A1
