@@ -40,7 +40,7 @@ Transfer process:
     Drop tip. 
 '''
 
-csv_name = 'Pooling.csv'
+csv_name = '/data/user_storage/Pooling.csv'
 
 csvfile = open(csv_name).readlines()
 #Getting the worklist number from the first row of the csv file
@@ -61,20 +61,22 @@ def run(protocol):
     tiprack_20ul = protocol.load_labware('opentrons_96_tiprack_20ul', '10')
 
     # Add pipettes
-    pipette = protocol.load_instrument('p20_single_gen2', 'left', tip_racks=[tiprack_20ul])
-    # Height for the aspirate and dispense doesn't change, so I will state outside the loop. 
-    pipette.well_bottom_clearance.aspirate = 1
-    pipette.well_bottom_clearance.dispense = 0.5
+    pipette = protocol.load_instrument('p20_single_gen2', 'right', tip_racks=[tiprack_20ul])
+    # Height for the aspirate and dispense (in mm above the bottom)
+    pipette.well_bottom_clearance.aspirate = 2
+    pipette.well_bottom_clearance.dispense = 1
 
                 # Transfers 
     for row in reader: 
         pipette.pick_up_tip()
         pipette.aspirate(float(row['VolumeToTransfer']), non_skirted_plate[(row['SourceWell'])])
-        pipette.touch_tip(non_skirted_plate[(row['SourceWell'])], speed = 20.0, v_offset = -3.0) 
-         # Blow out height is 0.5 above the dispense height.
+        # Touch tip 8mm from the top of the well
+        pipette.touch_tip(non_skirted_plate[(row['SourceWell'])], speed = 20.0, v_offset = -8.0) 
+         # Blow out height is 1mm above the bottom of the well
         blow_out_height = 1
+        # Touch tip 8mm from the top of the well 
         pipette.dispense(float(row['VolumeToTransfer']), biomek_tube_rack[row['DestinationWell']])
-        pipette.touch_tip(biomek_tube_rack[(row['DestinationWell'])], speed = 20.0, v_offset = -4.0) 
+        pipette.touch_tip(biomek_tube_rack[(row['DestinationWell'])], speed = 20.0, v_offset = -8.0) 
         pipette.move_to(biomek_tube_rack[row['DestinationWell']].bottom(blow_out_height), force_direct=True)
         pipette.blow_out()
         pipette.drop_tip()
