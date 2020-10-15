@@ -1,5 +1,6 @@
 from opentrons import protocol_api 
 import csv 
+import os 
 
 
 metadata = {
@@ -40,7 +41,7 @@ Transfer process:
     Drop tip. 
 '''
 
-csv_name = '/data/user_storage/Pooling.csv'
+csv_name = 'Pooling.csv'
 
 csvfile = open(csv_name).readlines()
 #Getting the worklist number from the first row of the csv file
@@ -80,6 +81,8 @@ def run(protocol):
         pipette.move_to(biomek_tube_rack[row['DestinationWell']].bottom(blow_out_height), force_direct=True)
         pipette.blow_out()
         pipette.drop_tip()
+
+#os.remove(csv_name)
             
 
     
