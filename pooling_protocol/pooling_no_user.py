@@ -82,6 +82,7 @@ def run(protocol):
         pipette.blow_out()
         pipette.drop_tip()
 
+# Remove the CSV file at the end of the protocol
 #os.remove(csv_name)
             
 
