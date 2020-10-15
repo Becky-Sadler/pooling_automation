@@ -56,18 +56,18 @@ reader = csv.DictReader(csvfile)
 def run(protocol):
 
     protocol.pause("The worklist about to be processed is {0}. Please ensure this is correct before proceeding.".format(worklist_number))
-# Add labware
+    # Add labware
     non_skirted_plate = protocol.load_labware('4t_96_wellplate_200ul', '7')
     biomek_tube_rack = protocol.load_labware('biomekmicrofuge_24_wellplate_1700ul', '8')
     tiprack_20ul = protocol.load_labware('opentrons_96_tiprack_20ul', '10')
 
     # Add pipettes
     pipette = protocol.load_instrument('p20_single_gen2', 'right', tip_racks=[tiprack_20ul])
-    # Height for the aspirate and dispense (in mm above the bottom)
+    # Height for the aspirate and dispense (in mm above the bottom of the well/tube)
     pipette.well_bottom_clearance.aspirate = 2
     pipette.well_bottom_clearance.dispense = 1
 
-                # Transfers 
+    # Transfers 
     for row in reader: 
         pipette.pick_up_tip()
         pipette.aspirate(float(row['VolumeToTransfer']), non_skirted_plate[(row['SourceWell'])])
@@ -75,8 +75,8 @@ def run(protocol):
         pipette.touch_tip(non_skirted_plate[(row['SourceWell'])], speed = 20.0, v_offset = -8.0) 
          # Blow out height is 1mm above the bottom of the well
         blow_out_height = 1
-        # Touch tip 8mm from the top of the well 
         pipette.dispense(float(row['VolumeToTransfer']), biomek_tube_rack[row['DestinationWell']])
+        # Touch tip 8mm from the top of the well 
         pipette.touch_tip(biomek_tube_rack[(row['DestinationWell'])], speed = 20.0, v_offset = -8.0) 
         pipette.move_to(biomek_tube_rack[row['DestinationWell']].bottom(blow_out_height), force_direct=True)
         pipette.blow_out()
