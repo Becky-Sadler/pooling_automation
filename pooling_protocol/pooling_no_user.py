@@ -40,19 +40,21 @@ Transfer process:
     Drop tip. 
 '''
 
-# Sorting out data input - user input:  
-
 csv_name = 'Pooling.csv'
-#First test to see if the user has entered a numerical value:
 
-csvfile = open(csv_name, newline='')
+csvfile = open(csv_name).readlines()
+#Getting the worklist number from the first row of the csv file
+firstLine = csvfile.pop(0)
+worklist_number = firstLine.split(',')[1]
+#start_tip = firstLine.split(',')[3].rstrip()
+#Creating reader object to loop through the transfers
 reader = csv.DictReader(csvfile)
-worklist_number = '122356'
+
 
 # Define the protocol desk set up and steps. 
 def run(protocol):
 
-    protocol.pause("The worklist about to be processed is {0}, please ensure this is correct before proceeding".format(worklist_number))
+    protocol.pause("The worklist about to be processed is {0}. Please ensure this is correct before proceeding.".format(worklist_number))
 # Add labware
     non_skirted_plate = protocol.load_labware('4t_96_wellplate_200ul', '7')
     biomek_tube_rack = protocol.load_labware('biomekmicrofuge_24_wellplate_1700ul', '8')
@@ -69,7 +71,7 @@ def run(protocol):
         pipette.pick_up_tip()
         pipette.aspirate(float(row['VolumeToTransfer']), non_skirted_plate[(row['SourceWell'])])
         pipette.touch_tip(non_skirted_plate[(row['SourceWell'])], speed = 20.0, v_offset = -3.0) 
-                    # Blow out height is 0.5 above the dispense height (1 + 0.5) 
+         # Blow out height is 0.5 above the dispense height.
         blow_out_height = 1
         pipette.dispense(float(row['VolumeToTransfer']), biomek_tube_rack[row['DestinationWell']])
         pipette.touch_tip(biomek_tube_rack[(row['DestinationWell'])], speed = 20.0, v_offset = -4.0) 
