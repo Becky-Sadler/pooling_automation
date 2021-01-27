@@ -1,7 +1,0 @@
-LabwareType,LabwareName,ID,DeckPosition,StartTip
-tube_rack,biomekmicrofuge_24_wellplate_1700ul,tube_rack_1,7,
-tiprack,opentrons_96_tiprack_20ul,tip_rack_20ul,10,C1
-plate,4t_96_wellplate_200ul,plate_1,8,
-plate,4t_96_wellplate_200ul,plate_2,9,
-pipette,p20_single_gen2,pipette1,left,
-
